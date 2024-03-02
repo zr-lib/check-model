@@ -1,24 +1,110 @@
 # check-model
 
-A simple validate model for `Form`;
 
-`checkModel`, `Typescript`, `ValinaJS`
+一个`Form`表单极简的字段校验模型，框架无关，`Typescript`支持
 
-[中文](./README-zh.md)
-
-## Install
+## 安装
 
 ```bash
 npm i @zr/check-model
 ```
 
-## Using
+## 实现 createCheckModel
 
-### Form Data & Source
+- 在字段校验方法内
+   - 建议`value`的取值在`source[key]`取值之前，这样在模板调用的时候只要传`value`就可以了，防止在外面**页面渲染**调用时其他字段改动而触发校验
+   - `value`如果是`undefined`才会使用到`source`
+   - 如果**同一个字段**在不同tab有**不同的规则**，此时字段校验方法可以传入第三个参数`extras`，类型手动指定；然后**注意**调用`_validate`方法的时候也要传入
+- `createCheckModel`的参数会根据`Source`自动推导校验字段对应的**方法参数类型**；**深层key校验**可以看下文`DeepKeyType`
+- 使用`createCheckModel`创建`checkModel`，**定义**或者**调用**字段校验方法都会有**类型提示**与**类型校验**
+- 校验方法支持返回`boolean`/`string`，方便直接显示错误；注意不要返回`true`
+- 内部定义的`_state`对象：
+   - **记录上次的字段校验状态**；
+   - 存储一些`上次调用checkModel[key](data[key])`校验的结果；
+   - `_state`的`key`与`checkModel`的`key`一致
+- 内部定义的`_validate(source: S, checkConfig?: Partial<Record<keyof S, boolean>>, extras?: any)`方法：
+   - 校验是否存在错误，打印所有校验错误的提示
+   - `checkConfig`不传时，默认触发全部字段的校验方法
+   - **支持多个tab**但是字段不一样的**选定字段**校验，`checkConfig`传入**不同tab**需要校验的key，此时只会触发对应字段的校验方法，就可以在一个 `createCheckModel`下定义所有字段的校验方法了
+   - 如果**同一个字段**在不同tab有**不同的规则**，此时字段校验方法可以传入第三个参数`extras`，此处也需要传入；这个参数最好是一个对象，其他字段在`_validate`方法传入的是一样的，方便不同取值
+> **关于Promise**：一般检查重名等可能需要提前请求，手动写检查方法另外判断即可，这种情况比较少，基本就一个字段需要
 
-Define the `Source` and `Type` of form
 
-**Tips：**
+```typescript
+type HasErrorFn<V = any, S = any, Extra = any> = (
+  value: V,
+  source?: S,
+  extras?: Extra
+) => string | boolean;
+type ErrorModel<S, Extra> = {
+  [K in keyof S]?: HasErrorFn<K extends keyof S ? S[K] : any, S, Extra>;
+};
+
+/**
+ * 返回字段错误校验Model（范型传递）
+ * @description
+ * - 校验方法返回错误原因；false/''则视为无错误；
+ * - 如果要显示错误原因就不要返回true
+ */
+export function createCheckModel<
+  S extends Record<string, any>,
+  Extra extends Record<string, any> = any
+>(model: ErrorModel<S, Extra>) {
+  /** 存储一些上次调用model校验之后的提示信息 */
+  const _state: Partial<Record<keyof S, string | boolean>> = {};
+
+  const keys = Object.keys(model) as (keyof S)[];
+  keys.forEach((k) => {
+    const check = model[k];
+    model[k] = function (...args) {
+      _state[k] = check?.apply(this, args);
+      return _state[k] ?? '';
+    };
+  });
+
+  /**
+   * 校验是否存在错误
+   * @param checkConfig {} 传入需要校验的key，默认全部校验
+   * - 如果有`多个tab`但是字段不一样的情况，此时只写一个`createCheckModel`就可以了
+   */
+  function _validate(source: S, checkConfig?: Partial<Record<keyof S, boolean>>, extras?: Extra) {
+    const arr = [] as string[];
+    keys.forEach((k) => {
+      if (checkConfig && !checkConfig[k]) {
+        delete _state[k];
+        return;
+      }
+      const check = model[k];
+      const result = check?.(undefined as never, source, extras);
+      if (result) arr.push((k as string) + ': ' + result);
+    });
+    // 打印所有校验错误的提示数组
+    if (arr.length) console.warn('[checkModel]#####_state', _state);
+    return !!arr.length;
+  }
+
+  return { ...model, _state, _validate };
+}
+
+/** 返回当前应该取值的数据来源 */
+export function getCurrentValue<K extends keyof S, S extends Record<string, any>>(
+  value: S[K],
+  source: S | undefined,
+  key: K
+) {
+  if (value !== undefined) return value;
+  if (source !== undefined) return source[key];
+}
+
+```
+
+## 使用 createCheckModel
+
+### 表单数据与Source
+
+定义当前`Source`表单类型与数据`data`
+
+**注意：**
 
 - 有时候一个字段的数据是一个对象，然后里面也有**多个内部字段**需要校验，
 - 一般会扁平展开只设置一层如`content.length`/`content.type`，
@@ -188,4 +274,5 @@ const hasError = checkModel._validate(data, { name: true });
 ```typescript
 const hasError = checkModel._validate(data, undefined, extra);
 ```
+
 

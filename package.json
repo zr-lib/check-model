@@ -1,0 +1,31 @@
+{
+  "name": "@zr/check-model",
+  "version": "1.0.0",
+  "description": "checkModel;Typescript;ValinaJS",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "types": "tsc --declaration --emitDeclarationOnly --declarationDir types",
+    "build": "webpack && npm run types"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zero9527/check-model.git"
+  },
+  "keywords": [
+    "checkModel;Typescript;ValinaJS"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zero9527/check-model/issues"
+  },
+  "homepage": "https://github.com/zero9527/check-model#readme",
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  }
+}

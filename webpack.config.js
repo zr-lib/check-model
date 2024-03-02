@@ -4,15 +4,12 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   entry: './src/index.ts',
-  experiments: {
-    outputModule: true
-  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'checkModel.js',
+    filename: 'check-model.js',
     library: {
       name: 'checkModel',
-      type: 'module' //'umd'
+      type: 'umd'
     }
   },
   module: {

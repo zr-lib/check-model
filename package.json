@@ -2,7 +2,7 @@
   "name": "@zr/check-model",
   "version": "1.0.0",
   "description": "checkModel;Typescript;ValinaJS",
-  "main": "dist/index.js",
+  "main": "dist/check-model.js",
   "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

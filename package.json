@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "types": "tsc --declaration --emitDeclarationOnly --declarationDir types",
-    "build": "webpack && npm run types"
+    "build": "webpack && rm -rf ./types && npm run types"
   },
   "repository": {
     "type": "git",

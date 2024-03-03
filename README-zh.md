@@ -6,7 +6,7 @@
 ## 安装
 
 ```bash
-npm i @zr/check-model
+npm i @zr-lib/check-model
 ```
 
 ## 实现 createCheckModel

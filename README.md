@@ -9,7 +9,7 @@ A simple validate model for `Form`;
 ## Install
 
 ```bash
-npm i @zr/check-model
+npm i @zr-lib/check-model
 ```
 
 ## Using

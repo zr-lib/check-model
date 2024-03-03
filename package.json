@@ -1,5 +1,5 @@
 {
-  "name": "@zr/check-model",
+  "name": "@zr-lib/check-model",
   "version": "1.0.0",
   "description": "checkModel;Typescript;ValinaJS",
   "main": "dist/check-model.js",

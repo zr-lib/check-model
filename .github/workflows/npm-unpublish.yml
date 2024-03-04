@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  npm_unpublish_ver: ${{ secrets.UNPUBLISH_VERSION }}
+  npm_unpublish_ver: ${{ vars.NPM_UNPUBLISH_VER }}
 
 jobs:
   publish-npm:

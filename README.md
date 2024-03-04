@@ -46,16 +46,16 @@ const data = reactive<Source>({
 
 ### define checkModel
 
-创建后，导出供外部代码调用校验
-> `checkModel`的`key`跟对应的`方法`，在**编写校验代码**与**调用校验方法**时都会有自动补全和类型校验
+export and it can using every where
+> `checkModel` has `key` Function, and parameter type checking, Typescript support
 
-字段校验方法内注意未传值`undefined`的处理
+Handling of `undefined` values not passed in field validation methods
 
-- 单个字段时，字段校验方法的`source`参数为`undefined`
-- 调用`_validate`方法时，字段校验方法的`value`参数为`undefined`
-- 如id字段的校验，使用到了**第三个参数**`extra`；
-   - 一般可能**多个字段**都需要`extra`，此时最好传对象，这样多个字段可以按需取值
-   - 在调用单个字段校验方法时传参如：`checkModel.id(data.id, undefined, extra)`
+- When using a single field, the `source` parameter of the field validation method is `undefined`
+- When calling the `_validate` method, the `value` parameter of the field validation method is `undefined`
+- For the verification of the ID field, the third parameter `extra` was used;
+   - Generally, multiple fields may require 'extra'. In this case, it is best to pass the object so that multiple fields can take values as needed
+   - When calling a single field validation method, passing parameters such as: `checkModel.id(data.id, undefined, extra)`
      
 ```typescript
 
@@ -67,37 +67,37 @@ enum AppType {
 }
 
 export function checkId(type: AppType, id: number) {
-  if (!/^[0-9+]+$/.test(id + '')) return '请输入数字整数';
-  if (type === AppType.six) return `${id}`.length > 6 ? 'id不能超过6位数字' : '';
-  if (type === AppType.eight) return `${id}`.length > 8 ? 'id不能超过8位数字' : '';
+  if (!/^[0-9+]+$/.test(id + '')) return 'should input integer';
+  if (type === AppType.six) return `${id}`.length > 6 ? 'length of id can not more than six' : '';
+  if (type === AppType.eight) return `${id}`.length > 8 ? 'length of id can not more than eight' : '';
   return '';
 }
 
 const checkModel = createCheckModel<Source, Extra>({
   name: (value, source) => {
-    if (value !== undefined && !value) return '不能为空';
-    if (source !== undefined && !source?.name) return '不能为空';
-    return '不能为空';
+    if (value !== undefined && !value) return 'can not be empty';
+    if (source !== undefined && !source?.name) return 'can not be empty';
+    return 'can not be empty';
   },
   id: (value, source, extra) => {
     const { appType } = extra || {};
     const currentValue = getCurrentValue(value, source, 'id');
-    return !currentValue ? '不能为空' : checkId(appType!, currentValue);
+    return !currentValue ? 'can not be empty' : checkId(appType!, currentValue);
   },
   content: (value, source) => {
-    if (value !== undefined && !value) return '不能为空';
-    if (source !== undefined && !source?.content) return '不能为空';
-    return '不能为空';
+    if (value !== undefined && !value) return 'can not be empty';
+    if (source !== undefined && !source?.content) return 'can not be empty';
+    return 'can not be empty';
   },
   'content.length': (value, source) => {
-    if (value !== undefined && !value) return '不能为空';
-    if (source !== undefined && !source?.content.length) return '不能为空';
-    return '不能为空';
+    if (value !== undefined && !value) return 'can not be empty';
+    if (source !== undefined && !source?.content.length) return 'can not be empty';
+    return 'can not be empty';
   },
   'content.type': (value, source) => {
-    if (value !== undefined && !value) return '不能为空';
-    if (source !== undefined && !source?.content.type) return '不能为空';
-    return '不能为空';
+    if (value !== undefined && !value) return 'can not be empty';
+    if (source !== undefined && !source?.content.type) return 'can not be empty';
+    return 'can not be empty';
   }
 });
 ```
@@ -105,16 +105,15 @@ const checkModel = createCheckModel<Source, Extra>({
 
 - getCurrentValue Function
 
-使用 `getCurrentValue`如下，只需要一个`currentValue`，不用管从`value`还是`source`取值
 ```typescript
 const checkModel = createCheckModel<Source, Extra>({
   id: (value, source, extra) => {
     const { appType } = extra || {};
     const currentValue = getCurrentValue(value, source, 'id');
-    return !currentValue ? '不能为空' : checkId(appType!, currentValue);
+    return !currentValue ? 'can not be empty' : checkId(appType!, currentValue);
     // if (value !== undefined) return checkId(appType!, value);
     // if (source !== undefined) return checkId(appType!, source.id);
-    // return '不能为空';
+    // return 'can not be empty';
   },
   // ...
 }
@@ -124,12 +123,9 @@ const checkModel = createCheckModel<Source, Extra>({
 
 #### Check Single Field
 
-- 外部样式`class: error`调用`checkModel`下面的方法(key对应传入的数据key)，传入响应式的数据
-- 内部显示`错误信息`直接引用`_state`下面的属性即可
-
-这种情况不传第二个参数`source`，就不会在`页面引用`的地方被其他字段触发重新渲染了
-
-> 调用`checkModel[key](data[key])`方法是为了响应式，调用`checkModel._state[key]`是为了方便多次引用，避免多次写很长的代码
+- Wrapper element `class: error` should use function `checkModel[key](data[key])`，with reactive data;
+  - Make sure not pass Source parameter here, or it will rerender when other field of Source changed
+- Child element to `show error text` can use `_state[key]`
 
 
 - using in template
@@ -146,19 +142,19 @@ const checkModel = createCheckModel<Source, Extra>({
 ```
 
 ```typescript
-// use the reactive of "data.name"，inside the style "class: error"
+// using the reactive of "data.name"，inside the style "class: error"
 checkModel.name?.(data.name);
 
-// 这个是内部显示错误提示用，需要在响应式触发后使用，或者定义的时候使用reactive等包起来
+// no reactive; should using after reactive data, like child element
 checkModel._state.name; 
 ```
 
-如果需要多处调用，使用`computed`/`useMemo`即可:
+using in some place，see `computed`/`useMemo`
 ```typescript
 const nameError = computed(() => checkModel.name(data.name));
 ```
 
-#### check all field
+#### Check all field
 print the result on Console
 
 - trigger all field checking by default
@@ -167,10 +163,10 @@ const hasError = checkModel._validate(data);
 ```
 
 - only trigger some field checking
-   - 适用于`多个tab`切换，只写一个`createCheckModel`就可以校验所有字段
-   - `不同tab`传入对应的`checkConfig`即可
+   - tabs，one `createCheckModel` to check all field
+   - different `tab` use own `checkConfig`
 
-onyl check `name` fild like this
+For example, onyl check `name` fild like this
 ```typescript
 const hasError = checkModel._validate(data, { name: true });
 ```

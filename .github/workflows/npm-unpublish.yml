@@ -12,13 +12,15 @@ env:
 jobs:
   unpublish-npm:
     runs-on: ubuntu-latest
-    name: "unpublish @zr-lib/check-model@$npm_unpublish_ver"
+    name: "unpublish @${{ vars.NPM_UNPUBLISH_VER }}"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: npm unpublish @zr-lib/check-model@$npm_unpublish_ver
+      - run: |
+          echo "npm unpublish: @zr-lib/check-model@$npm_unpublish_ver"
+          npm unpublish @zr-lib/check-model@$npm_unpublish_ver
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

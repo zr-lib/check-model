@@ -2,8 +2,7 @@
   "name": "@zr-lib/check-model",
   "version": "1.0.2",
   "description": "checkModel;Typescript;ValinaJS",
-  "main": "lib/check-model.umd.js",
-  "module": "lib/check-model.esm.js",
+  "main": "lib/check-model.js",
   "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

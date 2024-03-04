@@ -6,6 +6,9 @@ name: npm-unpublish
 on:
   workflow_dispatch:
 
+env:
+  npm_unpublish_ver: ${{ secrets.UNPUBLISH_VERSION }}
+
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
@@ -15,6 +18,7 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: npm unpublish @zr-lib/check-model@${{secrets.UNPUBLISH_VERSION}}
+      - run: echo "npm unpublish version: $npm_unpublish_ver"
+      - run: npm unpublish @zr-lib/check-model@$npm_unpublish_ver
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

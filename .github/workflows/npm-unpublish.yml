@@ -18,7 +18,8 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: echo "npm unpublish version: $npm_unpublish_ver"
-      - run: npm unpublish @zr-lib/check-model@$npm_unpublish_ver
+      - run: |
+          echo "npm unpublish version: $npm_unpublish_ver"
+          npm unpublish @zr-lib/check-model@$npm_unpublish_ver
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

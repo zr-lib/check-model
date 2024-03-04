@@ -1,8 +1,9 @@
 {
   "name": "@zr-lib/check-model",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "checkModel;Typescript;ValinaJS",
-  "main": "dist/check-model.js",
+  "main": "lib/check-model.umd.js",
+  "module": "lib/check-model.esm.js",
   "types": "types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,7 +18,7 @@
     "url": "git+https://github.com/zero9527/check-model.git"
   },
   "keywords": [
-    "checkModel;Typescript;ValinaJS"
+    "checkModel","Typescript","ValinaJS"
   ],
   "author": "",
   "license": "MIT",

@@ -1,7 +1,7 @@
 # This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
 # For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
 
-name: npm-unpublish @zr-lib/check-model@${{ vars.NPM_UNPUBLISH_VER }}
+name: npm-unpublish
 
 on:
   workflow_dispatch:
@@ -12,6 +12,7 @@ env:
 jobs:
   unpublish-npm:
     runs-on: ubuntu-latest
+    name: "unpublish @zr-lib/check-model@$npm_unpublish_ver"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

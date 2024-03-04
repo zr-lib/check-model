@@ -1,6 +1,6 @@
 {
   "name": "@zr-lib/check-model",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "checkModel;Typescript;ValinaJS",
   "main": "lib/check-model.js",
   "types": "types/index.d.ts",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zero9527/check-model.git"
+    "url": "git+https://github.com/zr-lib/check-model.git"
   },
   "keywords": [
     "checkModel","Typescript","ValinaJS"
@@ -22,9 +22,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zero9527/check-model/issues"
+    "url": "https://github.com/zr-lib/check-model/issues"
   },
-  "homepage": "https://github.com/zero9527/check-model#readme",
+  "homepage": "https://github.com/zr-lib/check-model#readme",
   "devDependencies": {
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",

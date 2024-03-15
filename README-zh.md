@@ -1,7 +1,7 @@
 # check-model
 
 
-一个`Form`表单极简的字段校验模型，框架无关，`Typescript`支持
+一个`Form`表单极简的字段校验模型，框架无关，`Typescript`支持，实际引用大小不到`2kb`
 
 ## 安装
 
@@ -147,7 +147,7 @@ const data = reactive<Source>({
 
 字段校验方法内注意未传值`undefined`的处理
 
-- 单个字段时，字段校验方法的`source`参数为`undefined`
+- 单个字段时，字段校验方法的`source`参数不需要传，为`undefined`
 - 调用`_validate`方法时，字段校验方法的`value`参数为`undefined`
 - 如id字段的校验，使用到了**第三个参数**`extra`；
    - 一般可能**多个字段**都需要`extra`，此时最好传对象，这样多个字段可以按需取值

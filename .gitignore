@@ -130,3 +130,6 @@ types/
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+.yalc
+yalc.lock

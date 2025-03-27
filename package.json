@@ -1,6 +1,6 @@
 {
   "name": "@zr-lib/check-model",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "checkModel;Typescript;ValinaJS",
   "main": "lib/check-model.js",
   "types": "types/index.d.ts",
@@ -17,7 +17,9 @@
     "url": "git+https://github.com/zr-lib/check-model.git"
   },
   "keywords": [
-    "checkModel","Typescript","ValinaJS"
+    "checkModel",
+    "Typescript",
+    "ValinaJS"
   ],
   "author": "",
   "license": "MIT",

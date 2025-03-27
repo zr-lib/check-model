@@ -10,7 +10,7 @@ type ErrorModel<S, Extra> = {
 /**
  * 返回字段错误校验Model（范型传递）
  * @description
- * - 校验方法返回错误原因；false/''则视为无错误；
+ * - 校验方法返回错误原因；false/''则视为无错误
  * - 如果要显示错误原因就不要返回true
  */
 export function createCheckModel<
@@ -50,7 +50,20 @@ export function createCheckModel<
     return !!arr.length;
   }
 
-  return { ...model, _state, _validate };
+  /** 清空_state记录的错误信息 */
+  function _clearValidate() {
+    (Object.keys(_state) as (keyof S)[]).forEach((k) => (_state[k] = ''));
+  }
+
+  return {
+    ...model,
+    /** 错误信息 */
+    _state,
+    /** @returns true: hasError */
+    _validate,
+    /** 清空_state记录的错误信息 */
+    _clearValidate
+  };
 }
 
 /** 返回当前应该取值的数据来源 */

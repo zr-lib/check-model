@@ -176,3 +176,9 @@ const hasError = checkModel._validate(data, { name: true });
 const hasError = checkModel._validate(data, undefined, extra);
 ```
 
+#### Clear Validate info
+
+```typescript
+checkModel._clearValidate();
+```
+
